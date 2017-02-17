@@ -1,0 +1,14 @@
+{
+  "name": "node-js-slack-delete-files",
+  "version": "1.0.0",
+  "description": "node-js-slack-delete-files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anh Le Hoang",
+  "license": "MIT",
+  "dependencies": {
+    "got": "^6.7.1"
+  }
+}
