@@ -82,14 +82,14 @@ let accessFiles = function (token, onlyOldFiles) {
 	.catch(error => console.error('Error while getting files.', error));
 }
 
-//for debug, call out
-if(process.env.DEBUG){
+// 1 days interval check
+// error when interval > integer limit, 30 * 86400 * 1000 @@
+const run = function(){
 	accessFiles(CONFIG.token, true);
+	setTimeout(function(){
+		run();
+	}, 864000 * 1000); //1 days
 }
 
-setInterval(function(){
-	accessFiles(CONFIG.token, true);
-}, 864000 * 1000); //1 days
-//error when interval > integer limit
-//30 * 86400 * 1000 @@
-
+// First call
+run();
