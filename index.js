@@ -3,7 +3,7 @@
 const got        = require('got');
 const CONFIG     = require('./config.js');
 const API_URL    = 'https://slack.com/api';
-const LIMIT_FAIL = 50;
+const LIMIT_FAIL = 1000;
 
 let count_fail = 0;
 
@@ -17,13 +17,24 @@ let accessFiles = function (token, onlyOldFiles) {
 		//return back this delete promise
 		return got(`${API_URL}/files.delete`, { body: { token: token, file: file.id } })
 			.then((res) => {
-				if(res.body && res.body.ok == true){
-					console.log(`${file.name} was deleted.`);
+				let validRes;
+				
+				try{
+					validRes = res.body && JSON.parse(res.body);
+				}catch(err){
+					validRes = false;
+				}
+				
+				let okRes = validRes && validRes.ok == true;
+
+				if(!okRes){
+					//fail case, increase count
+					count_fail++;
+					console.log('Fail to delete, log res.body', res.body);
 					return;
 				}
-				//fail case, increase count
-				count_fail++;
-				console.log('Fail to delete, log res.body', res.body);
+				
+				console.log(`${file.name} was deleted.`);
 			})
 			.catch(error => console.error('Error while deleting files.', error))
 	}
